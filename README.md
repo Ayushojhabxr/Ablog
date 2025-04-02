@@ -1,6 +1,6 @@
 ✍️ Ablog – A Production-Ready Blogging Platform 🚀
 <br>
-A full-featured, modern blogging platform built with TypeScript, React.js, Appwrite, and Tailwind CSS. Ablog offers a seamless experience for writing, editing, and managing blog posts with real-time features, authentication, and a sleek dark theme.
+A full-featured, modern blogging platform built with   React.js, Appwrite, and Tailwind CSS. Ablog offers a seamless experience for writing, editing, and managing blog posts with real-time features, authentication, and a sleek dark theme.
 <br>
 
 ✨ Features<br>
