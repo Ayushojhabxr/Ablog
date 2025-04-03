@@ -6,10 +6,10 @@ import { Button } from "../components";
 
 export default function MyPosts() {
     const [userPosts, setUserPosts] = useState([]);
-    const userData = useSelector((state) => state.auth.userData); // 🔹 Get logged-in user data
-    const userId = userData?.userId;  // Safely get user ID
+    const userData = useSelector((state) => state.auth.userData);
+    const userId = userData?.userId;
 
-    console.log("🔹 User Data:", userData);
+    console.log("🔍 Raw User Data from Redux:", userData);
     console.log("🔹 Extracted User ID:", userId);
 
     useEffect(() => {
@@ -23,14 +23,13 @@ export default function MyPosts() {
                 console.log("🟢 Fetching posts for user ID:", userId);
                 const allPostsResponse = await appwriteService.getPosts();
 
-                console.log("📌 API Response:", allPostsResponse); // Log full API response
+                console.log("📌 API Response:", allPostsResponse);
 
                 if (!allPostsResponse?.documents) {
                     console.log("⚠️ No documents found in API response.");
                     return;
                 }
 
-                // 🔹 Filter posts by user ID
                 const filteredPosts = allPostsResponse.documents.filter(
                     (post) => post?.userId === userId
                 );
@@ -43,7 +42,11 @@ export default function MyPosts() {
         };
 
         fetchUserPosts();
-    }, [userId]); // Dependency changed from `userData` to `userId`
+    }, [userId]);
+
+    if (!userData) {
+        return <p className="text-gray-500">Loading user data...</p>;
+    }
 
     return (
         <div className="p-6">
