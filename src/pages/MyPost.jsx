@@ -12,6 +12,7 @@ export default function MyPosts() {
     useEffect(() => {
         const fetchUserPosts = async () => {
             if (!userData || !userData.userData || !userData.userData.$id) {
+                console.log(userData.userData.$id);
                 console.log("⚠️ User data not available or user is not logged in.");
                 return;
             }
