@@ -8,6 +8,7 @@ export default function MyPosts() {
     const [userPosts, setUserPosts] = useState([]);
     const userData = useSelector((state) => state.auth.userData); // 🔹 Get logged-in user data
 
+   console.log(userData);
     useEffect(() => {
         const fetchUserPosts = async () => {
             if (!userData || !userData.userData || !userData.userData.$id) {
