@@ -7,7 +7,7 @@ import { Button } from "../components";
 export default function MyPosts() {
     const [userPosts, setUserPosts] = useState([]);
     const userData = useSelector((state) => state.auth.userData); // 🔹 Get logged-in user data
-    const userId = userData?.$id; // Safely get user ID
+    const userId = userData?.userId;  // Safely get user ID
 
     console.log("🔹 User Data:", userData);
     console.log("🔹 Extracted User ID:", userId);
