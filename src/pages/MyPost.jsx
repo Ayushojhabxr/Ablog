@@ -7,12 +7,13 @@ import { Button } from "../components";
 export default function MyPosts() {
     const [userPosts, setUserPosts] = useState([]);
     const userData = useSelector((state) => state.auth.userData); // 🔹 Get logged-in user data
-    console.log(userData.userData.$id);
+   
+    const userId = userData?.userId;
+     console.log(userId);
    
     useEffect(() => {
         const fetchUserPosts = async () => {
-            if (!userData || !userData.userData || !userData.userData.$id) {
-                console.log(userData.userData.$id);
+            if (!userData || userId) {
                 console.log("⚠️ User data not available or user is not logged in.");
                 return;
             }
@@ -30,7 +31,7 @@ export default function MyPosts() {
 
                 // 🔹 Filter posts by user ID
                 const filteredPosts = allPostsResponse.documents.filter(
-                    (post) => post?.userId === userData.userData.$id
+                    (post) => post?.userId === userId
                 );
 
                 console.log("✅ Filtered Posts:", filteredPosts);
