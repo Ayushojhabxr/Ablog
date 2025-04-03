@@ -6,8 +6,8 @@ import { Button } from "../components";
 
 export default function MyPosts() {
     const [userPosts, setUserPosts] = useState([]);
-    const userData = useSelector((state) => state.auth.userData);
-    const userId = userData?.userId;
+    const userData = useSelector((state) => state.auth.userData); // Get logged-in user data
+    const userId = userData?.userId; // Safely extract user ID
 
     console.log("🔍 Raw User Data from Redux:", userData);
     console.log("🔹 Extracted User ID:", userId);
@@ -23,15 +23,21 @@ export default function MyPosts() {
                 console.log("🟢 Fetching posts for user ID:", userId);
                 const allPostsResponse = await appwriteService.getPosts();
 
-                console.log("📌 API Response:", allPostsResponse);
-
                 if (!allPostsResponse?.documents) {
                     console.log("⚠️ No documents found in API response.");
                     return;
                 }
 
+                console.log("📌 All Posts from API:", allPostsResponse.documents);
+
+                // Debug: Check if userId exists in posts
+                allPostsResponse.documents.forEach((post, index) => {
+                    console.log(`🔎 Post ${index}:`, post);
+                });
+
+                // Ensure correct comparison by converting both to strings
                 const filteredPosts = allPostsResponse.documents.filter(
-                    (post) => post?.userId === userId
+                    (post) => String(post?.userId) === String(userId)
                 );
 
                 console.log("✅ Filtered Posts:", filteredPosts);
@@ -42,11 +48,7 @@ export default function MyPosts() {
         };
 
         fetchUserPosts();
-    }, [userId]);
-
-    if (!userData) {
-        return <p className="text-gray-500">Loading user data...</p>;
-    }
+    }, [userId]); // Run effect when userId changes
 
     return (
         <div className="p-6">
