@@ -7,8 +7,8 @@ import { Button } from "../components";
 export default function MyPosts() {
     const [userPosts, setUserPosts] = useState([]);
     const userData = useSelector((state) => state.auth.userData); // 🔹 Get logged-in user data
-
-   console.log(userData);
+    console.log(userData.userData.$id);
+   
     useEffect(() => {
         const fetchUserPosts = async () => {
             if (!userData || !userData.userData || !userData.userData.$id) {
