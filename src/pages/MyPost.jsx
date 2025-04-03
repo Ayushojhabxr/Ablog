@@ -7,24 +7,25 @@ import { Button } from "../components";
 export default function MyPosts() {
     const [userPosts, setUserPosts] = useState([]);
     const userData = useSelector((state) => state.auth.userData); // 🔹 Get logged-in user data
-   
-    const userId = userData?.userId;
-     console.log(userId);
-   
+    const userId = userData?.userData?.$id; // Safely get user ID
+
+    console.log("🔹 User Data:", userData);
+    console.log("🔹 Extracted User ID:", userId);
+
     useEffect(() => {
         const fetchUserPosts = async () => {
-            if (!userData || userId) {
-                console.log("⚠️ User data not available or user is not logged in.");
+            if (!userId) {
+                console.log("⚠️ User is not logged in or data is missing.");
                 return;
             }
 
             try {
-                console.log("🟢 Fetching posts for user ID:", userData.userData.$id);
+                console.log("🟢 Fetching posts for user ID:", userId);
                 const allPostsResponse = await appwriteService.getPosts();
 
                 console.log("📌 API Response:", allPostsResponse); // Log full API response
 
-                if (!allPostsResponse || !allPostsResponse.documents) {
+                if (!allPostsResponse?.documents) {
                     console.log("⚠️ No documents found in API response.");
                     return;
                 }
@@ -42,7 +43,7 @@ export default function MyPosts() {
         };
 
         fetchUserPosts();
-    }, [userData]);
+    }, [userId]); // Dependency changed from `userData` to `userId`
 
     return (
         <div className="p-6">
