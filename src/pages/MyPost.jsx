@@ -6,43 +6,40 @@ import { Button } from "../components";
 
 export default function MyPosts() {
     const [userPosts, setUserPosts] = useState([]);
-    const userData = useSelector((state) => state.auth.userData); // 🔹 Get logged-in user data
+    const user = useSelector((state) => state.auth.userData?.userData); // ✅ Updated selector
 
     useEffect(() => {
         const fetchUserPosts = async () => {
-            if (!userData.userData.$id || !userData.userData) {
+            if (!user || !user.$id) {
                 console.log("User data not available or user is not logged in.");
-                return; // 🔹 Prevent fetching if userData is not available
+                return;
             }
 
             try {
-                const allPostsResponse = await appwriteService.getPosts(); // 🔹 Fetch all posts
-                const allPosts = allPostsResponse.documents || []; // Access the posts from 'documents' array
+                const allPostsResponse = await appwriteService.getPosts();
+                const allPosts = allPostsResponse?.documents || []; // ✅ Ensure `documents` exists
 
-                console.log("Fetched all posts:", allPosts); // Log the response to check the structure
+                console.log("Fetched all posts:", allPosts);
 
-                // 🔹 Filter posts by userId
-                const filteredPosts = allPosts.filter(post => post.userId === userData.userData.$id);
-
-                console.log("Filtered posts:", filteredPosts); // Log filtered posts
+                const filteredPosts = allPosts.filter(post => post.userId === user.$id);
+                console.log("Filtered posts:", filteredPosts);
 
                 setUserPosts(filteredPosts);
             } catch (error) {
-                console.log("Error fetching posts:", error); // Log any error from the API call
+                console.error("Error fetching posts:", error);
             }
         };
 
         fetchUserPosts();
-    }, [userData]);
+    }, [user]);
 
     return (
         <div className="p-6">
             <h2 className="text-2xl font-bold mb-4">📌 My Posts</h2>
-                
             <p className="text-gray-600 mb-4">Here are the posts you have created: Refresh the page once to get them ....</p>
+
             {userPosts.length === 0 ? (
                 <p className="text-gray-500">No posts found. Start writing now! ✍️</p>
-                
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {userPosts.map((post) => (
